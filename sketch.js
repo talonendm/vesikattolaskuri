@@ -40,9 +40,9 @@
  function setup() {
    let ca = createCanvas(1100, 550);
  
-   ca.parent('sketch-holder')
+   //ca.parent('sketch-holder')
 
-   ca.style('z-index', '-1'); // https://www.youtube.com/watch?v=OIfEHD3KqCg
+   // ca.style('z-index', '-1'); // https://www.youtube.com/watch?v=OIfEHD3KqCg
 
    // Init p5.bezier drawer
    //p5bezier.initBezier(c);
