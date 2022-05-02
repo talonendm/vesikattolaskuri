@@ -370,7 +370,7 @@
    
    if (pituusEstimateNow<900) {
      fill('red');
-     text("Repeytyminen ja vesi turmalee rakenteita!\nAluskate on kutistunut myöhemmin\nAvartuma naulan kohdalta noin: " + nfc((900 - pituusEstimateNow)/2,1) + "mm", 550,300 + roikkuma + 70);
+     text("Repeytyminen ja vesi turmelee rakenteita!\nAluskate on kutistunut myöhemmin\nAvartuma naulan kohdalta noin: " + nfc((900 - pituusEstimateNow)/2,1) + "mm", 550,300 + roikkuma + 70);
      
      // repeämä lautojen välissä:
      stroke('red');
