@@ -86,6 +86,10 @@
    button.position(720, 70);
    button.mousePressed(lasketuuletusvali);
    
+   let linkki = createA('https://talonendm.github.io/2022-04-30-purkusuunnitelma/', 'lue lisää blogista');
+   linkki.position(720, 48);
+   
+
    // Set styles for the curve
    noFill();
    stroke('black');
