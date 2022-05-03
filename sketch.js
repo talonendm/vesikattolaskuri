@@ -40,12 +40,8 @@
  function setup() {
    let ca = createCanvas(1100, 550);
  
-   //ca.parent('sketch-holder')
-
-   // ca.style('z-index', '-1'); // https://www.youtube.com/watch?v=OIfEHD3KqCg
-
    // Init p5.bezier drawer
-   //p5bezier.initBezier(c);
+   //p5bezier.initBezier(ca);
  
    frameRate(20);
    
@@ -85,6 +81,10 @@
    checkboxTuulettuvaruode = createCheckbox('tuulettuva vaakaruode', true);
    // checkboxTuuletusrima.changed(myCheckedEvent);
    
+   
+   button = createButton('Laske tuuletusväli');
+   button.position(720, 70);
+   button.mousePressed(lasketuuletusvali);
    
    // Set styles for the curve
    noFill();
@@ -143,6 +143,15 @@
    text("Peltikatteen sijainti.", 20, 100);
    text("Ruoteen reikien sijainti.", 20, 140);
    
+   //fill("white");
+   stroke('black');
+   //rect(720,50,200,40);
+   //textSize(16);
+   //fill("black");
+   //text("LASKE: Tuuletusväli.", 740, 60);
+   
+   
+   fill("black");
    textSize(14);
    text("Aluskatteen laskentapisteet.", 720, 100);
    
@@ -370,13 +379,16 @@
    
    if (pituusEstimateNow<900) {
      fill('red');
-     text("Repeytyminen ja vesi turmelee rakenteita!\nAluskate on kutistunut myöhemmin\nAvartuma naulan kohdalta noin: " + nfc((900 - pituusEstimateNow)/2,1) + "mm", 550,300 + roikkuma + 70);
+     
+     let repeamamm = (900 - pituusEstimateNow)/2
+     
+     text("Repeytyminen ja vesi turmelee rakenteita!\nAluskate on kutistunut myöhemmin\nAvartuma naulan kohdalta noin: " + nfc(repeamamm,1) + "mm", 550,300 + roikkuma + 70);
      
      // repeämä lautojen välissä:
      stroke('red');
      strokeWeight(5);
-     line(50,300,50+(900-pituusEstimateNow)/2,300);
-     line(1050,300,1050-(900-pituusEstimateNow)/2,300);
+     line(50,300,50+repeamamm,300);
+     line(1050,300,1050-repeamamm,300);
      strokeWeight(1);
      stroke("black");
      setLineDash([5, 11]); 
@@ -390,7 +402,7 @@
      stroke('green');
      
      strokeWeight(3);
-     for (i =0;i<20;i++) {
+     for (i =0;i<1 + round(repeamamm*2);i++) {
        point(5 + random(90), 301 + random(28));  
        point(1005 + random(90), 301 + random(28)); 
      }
