@@ -1,15 +1,18 @@
 /*
  * p5.bezier.js
  
+ PAREMPIEN VESIKATTOJEN PUOLESTA
  copyright: Jaakko Talonen
  Vappu 2022
  
+from p5: 5.5.-22
+
  TODO
  - naulat ja sen pituus: info meneekö läpi
  - Ruodelautojen eläminen, kutistuminen. välin kasvaminen
  - siirrä aloituspistettä puuX
  
- lopuksi: laskentaa voi tulla, jos halutaan tietyn mittanen aluskate näyttää. Ei tarpeen.
+ - animaatio: laskentaa voi tulla, jos halutaan tietyn mittanen aluskate näyttää. Ei tarpeen.
  */
 
 
@@ -30,6 +33,8 @@
  var metalliruodevari = "rgba(160,160,160,1)";
  var naulavari = "rgba(120,120,120,1)";
  var ilmakiertaavari = "rgba(200,200,255,1)";
+ var roikkumanyt = 0;
+ var tuuletusvalilaskettu = false;
  // let ilmakiertaavari = color(168, 204, 254, 255);
  
  var naulanpituus = 70; 
@@ -53,7 +58,7 @@
    radio.selected('1');
    
    // https://www.geeksforgeeks.org/p5-js-bezierpoint-function/
-   roikkumaSlider = createSlider(0, 80, 36, 1);
+   roikkumaSlider = createSlider(0, 80, 41, 1);
    roikkumaSlider.position(20, 70);
    
    reikakohtaSlider = createSlider(0, 150, 0, 1);
@@ -64,12 +69,16 @@
    
    
    // Aluskate Sliderit:
-   aluskatepysyvyysSlider = createSlider(0, 2, 0.3, 0.05);
+   aluskatepysyvyysSlider = createSlider(0, 2, 0.6, 0.05);
    aluskatepysyvyysSlider.position(220, 70);
    
-   aluskatetyyppiSlider = createSlider(300, 440, 350, 1);
+   aluskatetyyppiSlider = createSlider(300, 450, 410, 1);
    aluskatetyyppiSlider.position(220, 120);
    
+   
+   // changed event -- call f
+   roikkumaSlider.changed(LaskeRoikkuma);
+   aluskatetyyppiSlider.changed(NollaaTuuletusvalilasku);
    
    
    
@@ -84,12 +93,13 @@
    
    button = createButton('Laske tuuletusväli');
    button.position(720, 70);
-   button.mousePressed(lasketuuletusvali);
+   button.mousePressed(LaskeTuuletusvali);
    
    let linkki = createA('https://talonendm.github.io/2022-04-30-purkusuunnitelma/', 'lue lisää blogista');
    linkki.position(720, 48);
    
-
+   
+   
    // Set styles for the curve
    noFill();
    stroke('black');
@@ -97,6 +107,12 @@
  }
  
  function draw() {
+   
+   if (frameCount == 10) {
+     LaskeRoikkuma();
+     LaskeTuuletusvali();
+   }
+   
    background(235);
    
    textAlign(LEFT, TOP);
@@ -107,23 +123,33 @@
    text("Asennus", 20, 20);
    text("Aluskatteen ominaisuudet", 220, 20);
    text("Laskenta", 720, 20);
+   
+   
+   
    stroke("black");
-   if (laskettutuuletusvalijostiukka==0) {
-     text("Laskettu tuuletusväli (suorita laskenta - paina c-kirjainta) ", 20, 510);
+     
+   let laskentateksti = "Laskettu tuuletusväli (suorita laskenta): ";
+   if (tuuletusvalilaskettu) { 
+   if (laskettutuuletusvali<30) {
+     fill("red");
+      
+   } else if (laskettutuuletusvali<50) {
+     fill("yellow");
    } else {
+     fill("green");
+   }
      
-     if (laskettutuuletusvali<30) {
-       fill("red");
-       
-     } else if (laskettutuuletusvali<50) {
-       fill("yellow");
-     } else {
-       fill("green");
-     }
-     
-           text("Laskettu tuuletusväli (suorita laskenta - paina c-kirjainta): " + nfc(laskettutuuletusvali,1) + " mm. Jos aluskate kiristyy ruodevälillä: " + nfc(laskettutuuletusvalijostiukka, 1) + " mm.", 20,510);
+   text(laskentateksti + 
+        nfc(laskettutuuletusvali,1) + 
+        " mm. Jos aluskate kiristyy ruodevälillä: " + 
+        nfc(laskettutuuletusvalijostiukka, 1) + " mm.", 20,510
+       );
  
+          } else {
+            text(laskentateksti, 20, 510);
           }
+     
+   
    
    fill("black");
     
@@ -159,32 +185,30 @@
    textSize(14);
    text("Aluskatteen laskentapisteet.", 720, 100);
    
+   PiirraApuviivasto();
+     
+   // Pystyjuoksut
+   ruodelauta(1000,300,100,32);
+   ruodelauta(0,300,100,32);
+  
+   PiirraTuuletusrima();
+   PiirraVaakaruode();
+   PiirraRoikkuvaAluskate(true);
+   PiirraKate();
+   
+ }
+ 
+ function PiirraApuviivasto() {
    strokeWeight(0.4);
    stroke('white');
    for (i=0;i<50;i=i+5) {
      line(0,300+i,1000,300+i);
      
    }
-   strokeWeight(1);
-   stroke('black');
-   // Draw the curve
-   
-   //fill('lightblue');
-   //p5bezier.newBezier([
-   //  [100, 300],
-   //  [550, 300 + roikkuma],
-   //  [1000, 300]//,
-     //[500, -800],
-     //[800, 1000],
-     //[10, 300]
-   //]);
-   
-   // Pystyjuoksut
-   ruodelauta(1000,300,100,32);
-   ruodelauta(0,300,100,32);
-   
-   
-   if (tuuletusrimakoko!=0) {
+ }
+ 
+ function PiirraTuuletusrima() {
+    if (tuuletusrimakoko!=0) {
      if (tuuletusrimakoko==1) {
        tuuletusrimaH = 32;
        tuuletusrimaL = 100;
@@ -219,8 +243,12 @@
    } else {
      tuuletusrimaH = 0;
    }
+ }
+ 
+ 
+ function PiirraVaakaruode() {
    
-   // Vaakaruode ----------------------------------------
+    // Vaakaruode ----------------------------------------
    if (checkboxTuulettuvaruode.checked()) {
      // Tuulettuvaruode
      strokeWeight(1);
@@ -263,8 +291,58 @@
      
    }
    // ......................................................
+ }
+ 
+ 
+ function PiirraKate(){
+    // kate();
+   
+   for (i = -2; i<5;i++) {
+     kateylaosa(i*225 + katekohta);
+   }
+ }
+ 
+ 
+ 
+ function NollaaTuuletusvalilasku() {
+   tuuletusvalilaskettu = false; // pitää laskea ala erikseen
+ }
+ 
+ 
+ // ---------------------------------------------
+ function LaskeRoikkuma() {
+   
+   NollaaTuuletusvalilasku(); // tuuletusvalilaskettu = false; // pitää laskea ala erikseen
+   
+   // clean arrow etc.
+   PiirraRoikkuvaAluskate(false);
    
    
+   roikkumanyt = 0;
+   
+   for (var y = 300; y < 400; y=y+1) {
+    // for (var x = 50; x < 1050; x=x + 1) {
+      x = 550;
+       var index = (x + y * width);
+     //  if (y == 250) print(get(x,y));
+       if (color(get(x,y)) == ilmakiertaavari) {
+      // pixels[index + 0] = x;
+      // pixels[index + 1] = random(255);
+      // pixels[index + 2] = y;
+      // pixels[index + 3] = 255;
+         roikkumanyt = y - 300;
+       }
+   //  }
+   }
+   
+   
+   // print("Roikkumapikseleitä: " + roikkumanyt);
+   
+ }
+ // ---------------------------------------------
+ 
+ // ---------------------------------------------
+ function PiirraRoikkuvaAluskate(laskentapisteidenpiirto) {
    
    let p1 = { x: 100, y: 300 };
    let p2 = { x: 550 - aluskateX, y: 300 + roikkuma };
@@ -282,6 +360,9 @@
    line(1000,300,1100,300);
    
    bezier(p1.x, p1.y, p2.x, p2.y, p3.x, p3.y, p4.x, p4.y);
+   
+   
+   if (laskentapisteidenpiirto) {
    
    pituusEstimate = 0;
    for (let i = 0; i <= maxPoints; i++) {
@@ -303,22 +384,19 @@
    }
    
    aluskateteksti()
-   
-   // kate();
-   
-   for (i = -2; i<5;i++) {
-     kateylaosa(i*225 + katekohta);
+     
    }
    
-   
-   
- 
    
  }
  
  
  // ---------------------------------------------
- function lasketuuletusvali() {
+ function LaskeTuuletusvali() {
+   // tuuletusvalilaskettu = true;
+   LaskeRoikkuma();
+   tuuletusvalilaskettu = true; // after roikkuma calculation
+   PiirraRoikkuvaAluskate(false);
      let c = 0;
    loadPixels();
      var tuuletusta = 0;
@@ -351,8 +429,6 @@
      }
    }
    
-   
-   
    print("Tuuletuspikseleitä: " + tuuletusta);
      
    let tuuletusvalikorkeus = tuuletusta / 900;
@@ -362,19 +438,31 @@
  }
  // ---------------------------------------------
  
- 
+ // ---------------------------------------------
  function keyPressed() {
    if (key === 'c' | key === 'C') {
-   lasketuuletusvali();
+   LaskeTuuletusvali();
    }
  }
+ // ---------------------------------------------
  
  // ---------------------------------------------
  function aluskateteksti() {
    
    textAlign(CENTER, TOP);
    fill('black');
-   textSize(24);
+   textSize(20);
+   
+   if (roikkumanyt>0) {
+     
+     if (roikkumanyt<=40) {
+       text("Roikkuma:" + nfc(roikkumanyt) + "mm", 550, 300 + roikkuma + 2);
+     } else {
+       text("Roikkuma:" + nfc(roikkumanyt) + "mm. Huom. Suositus alle 30mm.", 550, 300 + roikkuma + 2);
+     }
+     
+   
+   }
    
    text("Aluskatteen pituus ruodevälillä:" + nfc(pituusEstimate,1) + "mm", 550, 300 + roikkuma + 20);
    
@@ -386,7 +474,14 @@
      
      let repeamamm = (900 - pituusEstimateNow)/2
      
-     text("Repeytyminen ja vesi turmelee rakenteita!\nAluskate on kutistunut myöhemmin\nAvartuma naulan kohdalta noin: " + nfc(repeamamm,1) + "mm", 550,300 + roikkuma + 70);
+     
+     if (repeamamm<4) {
+        text("Aluskate saattaa revetä!\nAvartuma naulan kohdalta noin: " + nfc(repeamamm,1) + "mm", 550,300 + roikkuma + 70);
+     } else {
+        text("Repeytyminen ja vesi turmelee rakenteita!\nAluskate on kutistunut myöhemmin\nAvartuma naulan kohdalta noin: " + nfc(repeamamm,1) + "mm", 550,300 + roikkuma + 70);
+     }
+     
+    
      
      // repeämä lautojen välissä:
      stroke('red');
