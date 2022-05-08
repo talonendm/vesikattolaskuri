@@ -5,8 +5,10 @@
  copyright: Jaakko Talonen
  Vappu 2022
  
-from p5: 5.5.-22
-
+ git (copypasted)
+ 5.5.2022
+ 8.5.2022 - checkbox.position
+ 
  TODO
  - naulat ja sen pituus: info meneekö läpi
  - Ruodelautojen eläminen, kutistuminen. välin kasvaminen
@@ -57,6 +59,9 @@ from p5: 5.5.-22
    radio.style('width', '500px');
    radio.selected('1');
    
+   radio.position(20, 460);
+   
+   
    // https://www.geeksforgeeks.org/p5-js-bezierpoint-function/
    roikkumaSlider = createSlider(0, 80, 41, 1);
    roikkumaSlider.position(20, 70);
@@ -89,7 +94,7 @@ from p5: 5.5.-22
    // checkboxTuuletusrima = createCheckbox('tuuletusrima', false);
    checkboxTuulettuvaruode = createCheckbox('tuulettuva vaakaruode', true);
    // checkboxTuuletusrima.changed(myCheckedEvent);
-   
+   checkboxTuulettuvaruode.position(20, 430);
    
    button = createButton('Laske tuuletusväli');
    button.position(720, 70);
@@ -124,6 +129,7 @@ from p5: 5.5.-22
    text("Aluskatteen ominaisuudet", 220, 20);
    text("Laskenta", 720, 20);
    
+   text("Ruoteet", 20, 400);
    
    
    stroke("black");
