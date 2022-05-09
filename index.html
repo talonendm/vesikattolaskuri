@@ -5,12 +5,15 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
     
     <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.4/addons/p5.dom.min.js"></script>-->
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <!--<link rel="stylesheet" type="text/css" href="style.css"> -->
     <meta name="viewport" content="width=device-width, user-scalable=yes, initial-scale=1, maximum-scale=1">
 	
     <!-- pyscript test: view-source:https://pyscript.net/examples/simple_clock.html -->
     <link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" />
     <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
+
+
+    
     <py-env>
     - paths:
       - ./utils.py
@@ -23,31 +26,29 @@
     <div class="font-mono">start time: <label id="outputDiv"></label></div>
     <div id="outputDiv2" class="font-mono"></div>
     <div id="outputDiv3" class="font-mono"></div>
-
     <py-script output="outputDiv">
-      import utils
-      utils.now()
-    </py-script>
-      
-    <py-script>
-      from utils import now
-      import asyncio
-      
-      async def foo():
-        while True:
-          await asyncio.sleep(1)
-          output = now()
-          pyscript.write("outputDiv2", output)
-          
-          out3 = Element("outputDiv3")
-          if output[-1] in ["0", "1"]:
-            out3.write("Parempien vesikattojen puolesta")
-          else:
-            out3.clear()
-      
-      pyscript.run_until_complete(foo())
+import utils
+utils.now()
     </py-script>
 
+    <py-script>
+from utils import now
+import asyncio
+
+async def foo():
+  while True:
+    await asyncio.sleep(1)
+    output = now()
+    pyscript.write("outputDiv2", output)
+    
+    out3 = Element("outputDiv3")
+    if output[-1] in ["0", "4", "8"]:
+      out3.write("It's espresso time!")
+    else:
+      out3.clear()
+
+pyscript.run_until_complete(foo())
+    </py-script>
 
   </body>
 </html>
