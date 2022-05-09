@@ -8,9 +8,41 @@
     <link rel="stylesheet" type="text/css" href="style.css">
     <meta name="viewport" content="width=device-width, user-scalable=yes, initial-scale=1, maximum-scale=1">
 	
+    <!-- pyscript test: view-source:https://pyscript.net/examples/simple_clock.html -->
+    <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
+    <py-env>
+    - paths:
+      - ./utils.py
+    </py-env>
+
 	</head>
   <body>
     <script src="sketch.js"></script>
+
+    <py-script output="outputDiv">
+      import utils
+      utils.now()
+    </py-script>
+      
+    <py-script>
+      from utils import now
+      import asyncio
+      
+      async def foo():
+        while True:
+          await asyncio.sleep(1)
+          output = now()
+          pyscript.write("outputDiv2", output)
+          
+          out3 = Element("outputDiv3")
+          if output[-1] in ["0", "1"]:
+            out3.write("Parempien vesikattojen puolesta")
+          else:
+            out3.clear()
+      
+      pyscript.run_until_complete(foo())
+    </py-script>
+
 
   </body>
 </html>
