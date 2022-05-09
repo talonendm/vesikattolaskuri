@@ -9,6 +9,7 @@
     <meta name="viewport" content="width=device-width, user-scalable=yes, initial-scale=1, maximum-scale=1">
 	
     <!-- pyscript test: view-source:https://pyscript.net/examples/simple_clock.html -->
+    <link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" />
     <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
     <py-env>
     - paths:
@@ -18,6 +19,10 @@
 	</head>
   <body>
     <script src="sketch.js"></script>
+
+    <div class="font-mono">start time: <label id="outputDiv"></label></div>
+    <div id="outputDiv2" class="font-mono"></div>
+    <div id="outputDiv3" class="font-mono"></div>
 
     <py-script output="outputDiv">
       import utils
