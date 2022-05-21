@@ -103,7 +103,8 @@
    let linkki = createA('https://talonendm.github.io/2022-04-30-purkusuunnitelma/', 'lue lisää blogista');
    linkki.position(720, 48);
    
-   
+   let linkkivastuu = createA('https://github.com/talonendm/vesikattolaskuri/blob/gh-pages/README.md', '&#x1F6C8;');
+   linkkivastuu.position(1050, 18);
    
    // Set styles for the curve
    noFill();
