@@ -54,10 +54,11 @@
    
    radio = createRadio();
    radio.option('0', 'ei tuuletusrimaa');
-   radio.option('1', 'lauta 32x100');
-   radio.option('2', 'lauta 45x60');
+   radio.option('1', 'lauta 22x100');
+   radio.option('2', 'lauta 32x100');
+   radio.option('3', 'lauta 45x60');
    radio.style('width', '500px');
-   radio.selected('1');
+   radio.selected('2');
    
    radio.position(20, 460);
    
@@ -217,8 +218,11 @@
  function PiirraTuuletusrima() {
     if (tuuletusrimakoko!=0) {
      if (tuuletusrimakoko==1) {
-       tuuletusrimaH = 32;
+       tuuletusrimaH = 22;
        tuuletusrimaL = 100;
+     } else if (tuuletusrimakoko==2) {
+      tuuletusrimaH = 32;
+      tuuletusrimaL = 100;
      } else {
        tuuletusrimaH = 45;
        tuuletusrimaL = 60;
@@ -231,14 +235,14 @@
      // Pystyjuoksut
      // fill(puunvari);
      
-     if (tuuletusrimakoko==1) {
-       ruodelauta(0, 300-tuuletusrimaH, tuuletusrimaL, tuuletusrimaH);
-     ruodelauta(1000, 300-tuuletusrimaH, tuuletusrimaL, tuuletusrimaH);
+     if (tuuletusrimakoko==1 | tuuletusrimakoko==2) {
+      ruodelauta(0, 300-tuuletusrimaH, tuuletusrimaL, tuuletusrimaH);
+      ruodelauta(1000, 300-tuuletusrimaH, tuuletusrimaL, tuuletusrimaH);
        
        
      } else {
-       ruodelauta(0+20, 300-tuuletusrimaH, tuuletusrimaL, tuuletusrimaH);
-     ruodelauta(1000+20, 300-tuuletusrimaH, tuuletusrimaL, tuuletusrimaH);
+      ruodelauta(0+20, 300-tuuletusrimaH, tuuletusrimaL, tuuletusrimaH);
+      ruodelauta(1000+20, 300-tuuletusrimaH, tuuletusrimaL, tuuletusrimaH);
      }
      
      
