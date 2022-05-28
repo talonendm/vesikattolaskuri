@@ -293,7 +293,9 @@ function PiirraVaakaruode() {
     strokeWeight(1);
     fill(ilmakiertaavari);
 
+    // HOLES --------------------------------------------
     if (tuuletusrimareikavali > 0) {
+      // holes in vaakaruode, calculate loop start and end indicies as:
       var reikia_n = round(1100 / tuuletusrimareikavali) + 1;  // 8
       var reika_alkualoitus = round(-1 - reikakohta / tuuletusrimareikavali);   // 0;
 
@@ -301,6 +303,7 @@ function PiirraVaakaruode() {
         ellipse(i * tuuletusrimareikavali + reikakohta, 300 - 16 - tuuletusrimaH, 20, 20); //  Number: width of the ellipse.
       }
     }
+    
     naula(50, 300 - tuuletusrimaH - 4);
     naula(100 + ruodeleveys + 50, 300 - tuuletusrimaH - 5);
 
