@@ -15,6 +15,10 @@
  - siirrä aloituspistettä puuX
  
  - animaatio: laskentaa voi tulla, jos halutaan tietyn mittanen aluskate näyttää. Ei tarpeen.
+
+ - taustaväri valkoiseksi
+
+
  */
 
 
@@ -57,11 +61,12 @@ function setup() {
   // tuuletusrima radiobutton as ............................
   radio = createRadio();
   radio.option('0', 'ei tuuletusrimaa');
-  radio.option('1', 'lauta 22 x 100mm');
-  radio.option('2', 'lauta 32 x 100mm');
-  radio.option('3', 'lauta 45 x 60mm');
-  radio.option('4', 'lauta 25 x 50mm'); // https://teeitse.com/katot/tiilikatto/tiilikaton-asentaminen
-  radio.option('5', 'lauta 32 x 50mm'); // https://www.kattocenter.fi/fi/kattoremontti/tuulettuva-kattorakenne/
+  radio.option('1', 'lauta 22x100mm');
+  radio.option('2', 'lauta 32x100mm');
+  radio.option('3', 'lauta 45x60mm');
+  radio.option('4', 'lauta 25x50mm'); // https://teeitse.com/katot/tiilikatto/tiilikaton-asentaminen
+  radio.option('5', 'lauta 32x50mm'); // https://www.kattocenter.fi/fi/kattoremontti/tuulettuva-kattorakenne/
+  radio.option('6', 'teräs 32x85mm');
 
   radio.style('width', '900px');
   radio.selected('1');
@@ -218,8 +223,8 @@ function draw() {
   PiirraApuviivasto();
 
   // Pystyjuoksut
-  ruodelauta(1000, 300, 100, 32);
-  ruodelauta(0, 300, 100, 32);
+  ruodelauta(1000, 300, 100, 32, puunvari);
+  ruodelauta(0, 300, 100, 32, puunvari);
 
   PiirraTuuletusrima();
   PiirraVaakaruode();
@@ -254,6 +259,9 @@ function PiirraTuuletusrima() {
     } else if (tuuletusrimakoko == 5) {
       tuuletusrimaH = 32;
       tuuletusrimaL = 50;
+    } else if (tuuletusrimakoko == 6) {
+      tuuletusrimaH = 32;
+      tuuletusrimaL = 65;
     }
 
     noStroke();
@@ -263,12 +271,26 @@ function PiirraTuuletusrima() {
 
     if (tuuletusrimakoko == 1 | tuuletusrimakoko == 2) {
       // width of strip is the same as vertical bar:
-      ruodelauta(0, 300 - tuuletusrimaH, tuuletusrimaL, tuuletusrimaH);
-      ruodelauta(1000, 300 - tuuletusrimaH, tuuletusrimaL, tuuletusrimaH);
+      ruodelauta(0, 300 - tuuletusrimaH, tuuletusrimaL, tuuletusrimaH, puunvari);
+      ruodelauta(1000, 300 - tuuletusrimaH, tuuletusrimaL, tuuletusrimaH, puunvari);
     } else {
-      ruodelauta(0 + 20, 300 - tuuletusrimaH, tuuletusrimaL, tuuletusrimaH);
-      // draw tuuletusrima (ventilation strip) to middle of pystyruode (vertical bar) as
-      ruodelauta(1000 + (100 - tuuletusrimaL) / 2, 300 - tuuletusrimaH, tuuletusrimaL, tuuletusrimaH);
+
+
+      if (tuuletusrimakoko == 6) {
+
+
+        // metalliruodevari
+        ruodelauta(0 + 20, 300 - tuuletusrimaH, tuuletusrimaL, tuuletusrimaH, metalliruodevari);
+        // draw tuuletusrima (ventilation strip) to middle of pystyruode (vertical bar) as
+        ruodelauta(1000 + (100 - tuuletusrimaL) / 2, 300 - tuuletusrimaH, tuuletusrimaL, tuuletusrimaH, metalliruodevari);
+
+      } else {
+        ruodelauta(0 + 20, 300 - tuuletusrimaH, tuuletusrimaL, tuuletusrimaH, puunvari);
+        // draw tuuletusrima (ventilation strip) to middle of pystyruode (vertical bar) as
+        ruodelauta(1000 + (100 - tuuletusrimaL) / 2, 300 - tuuletusrimaH, tuuletusrimaL, tuuletusrimaH, puunvari);
+      }
+
+      
     }
 
     strokeWeight(1);
@@ -310,7 +332,7 @@ function PiirraVaakaruode() {
   } else {
     // strokeWeight(1);
     // fill(puunvari);
-    ruodelauta(0, 300 - 32 - tuuletusrimaH, 1100, 32);
+    ruodelauta(0, 300 - 32 - tuuletusrimaH, 1100, 32, puunvari);
     // rect(0,300-32-tuuletusrimaH,1100,32);
 
     if (tuuletusrimakoko == 0) {
@@ -559,10 +581,10 @@ function aluskateteksti() {
 
 
 // ---------------------------------------------
-function ruodelauta(x, y, l, h) {
+function ruodelauta(x, y, l, h, c) {
   strokeWeight(1);
   stroke(puunvariDark);
-  fill(puunvari);
+  fill(c);
   rect(x, y, l, h);
 }
 // ---------------------------------------------
